@@ -1,0 +1,23 @@
+{
+  "name": "angular-recordrtc",
+  "main": "angular-recordrtc.js",
+  "description": "A directive for implementing record RTC in angular 1.x",
+  "keywords": [
+    "record",
+    "video",
+    "audio",
+    "rtc"
+  ],
+  "authors": [
+    "James Speirs"
+  ],
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/Gi60s/angular-recordrtc",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
