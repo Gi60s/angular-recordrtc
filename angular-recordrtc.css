@@ -1,0 +1,60 @@
+.record-rtc-backdrop {
+  display: block;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, .8);
+  display: none;
+}
+.record-rtc-outer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.record-rtc-inner {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 720px;
+	width: 80%;
+  margin: auto;
+}
+.record-rtc-inner:before {
+  content: "";
+	display: block;
+}
+.record-rtc-inner.record-rtc-standard:before {
+  padding-top: 75%;
+}
+.record-rtc-inner.record-rtc-widescreen:before {
+  padding-top: 56.25%;
+}
+.record-rtc-video {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  cursor: default;
+}
+.record-rtc-controls {
+  height: 39px;
+  position: relative;
+  font-size: 0;
+  cursor: default;
+}
+.record-rtc-controls button {
+  border: none;
+  padding: 6px;
+  margin: 0;
+  background-color: rgba(0, 0, 0, .5);
+  color: #FFF;
+  cursor: pointer;
+}
+.record-rtc-controls button:hover {
+  background-color: rgba(90, 90, 90, .5);
+}
