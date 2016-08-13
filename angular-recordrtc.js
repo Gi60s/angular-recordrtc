@@ -49,15 +49,6 @@
       factory.getStream = function(constraints) {
         if (!constraints) constraints = factory.config.constraints;
         return $q(function(resolve, reject) {
-
-          // attempt to get the user media function
-          var getUserMedia = (navigator.getUserMedia ||
-              navigator.webkitGetUserMedia ||
-              navigator.mozGetUserMedia);
-
-          // if no browser support then reject with an error
-          if (!getUserMedia) return reject(new Error('getUserMedia is not implemented in this browser'));
-
           navigator.mediaDevices.getUserMedia(constraints)
             .then(
               function(stream) {
@@ -90,24 +81,22 @@
         '  <div class="record-rtc-outer">' +
         '    <div class="record-rtc-inner record-rtc-widescreen">' +
         '      <video class="record-rtc-video"></video>' +
+        '      <div class="record-rtc-messages">' +
+        '        <div class="record-rtc-message-playing">Playback</div>' +
+        '        <div class="record-rtc-message-recording">Recording</div>' +
+        '      </div>' +
         '      <div class="record-rtc-controls">' +
-        '        <button type="button" class="record-rtc-play" ng-hide="{{!paused}}">' +
-        '          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">' +
-        '            <path fill="#fff" d="M10.396 18.433c2.641-2.574 6.604-6.433 6.604-6.433s-3.963-3.859-6.604-6.433c-0.363-0.349-0.853-0.567-1.396-0.567-1.104 0-2 0.896-2 2v10c0 1.104 0.896 2 2 2 0.543 0 1.033-0.218 1.396-0.567z"></path>' +
-        '          </svg>' +
-        '        </button>' +
-        '        <button type="button" class="record-rtc-pause" ng-hide="{{paused}}">' +
-        '          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">' +
-        '            <path fill="#fff" d="M8 6c-1.104 0-2 0.896-2 2v8c0 1.104 0.896 2 2 2s2-0.896 2-2v-8c0-1.104-0.896-2-2-2z"></path>' +
-        '            <path fill="#fff" d="M15 6c-1.104 0-2 0.896-2 2v8c0 1.104 0.896 2 2 2s2-0.896 2-2v-8c0-1.104-0.896-2-2-2z"></path>' +
-        '          </svg>' +
-        '        </button>' +
-        '        <button type="button" class="record-rtc-record">' +
+        '        <button type="button" class="record-rtc-record" ng-click="ctrl.startRecording()">' +
         '          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">' +
         '            <path fill="#fff" d="M18 12c0-1.657-0.672-3.157-1.757-4.243-1.086-1.085-2.586-1.757-4.243-1.757-1.656 0-3.156 0.672-4.242 1.757-1.086 1.086-1.758 2.586-1.758 4.243 0 1.656 0.672 3.156 1.758 4.242s2.586 1.758 4.242 1.758c1.657 0 3.157-0.672 4.243-1.758 1.085-1.086 1.757-2.586 1.757-4.242z"></path>' +
         '          </svg>' +
         '        </button>' +
-        '        <button type="button" class="record-rtc-stop">' +
+        '        <button type="button" class="record-rtc-play" ng-click="ctrl.playback()" style="display: none">' +
+        '          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">' +
+        '            <path fill="#fff" d="M10.396 18.433c2.641-2.574 6.604-6.433 6.604-6.433s-3.963-3.859-6.604-6.433c-0.363-0.349-0.853-0.567-1.396-0.567-1.104 0-2 0.896-2 2v10c0 1.104 0.896 2 2 2 0.543 0 1.033-0.218 1.396-0.567z"></path>' +
+        '          </svg>' +
+        '        </button>' +
+        '        <button type="button" class="record-rtc-stop" ng-click=ctrl.stopRecording() style="display: none">' +
         '          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">' +
         '            <path fill="#fff" d="M16 6h-8c-1.1 0-2 0.9-2 2v8c0 1.1 0.9 2 2 2h8c1.1 0 2-0.9 2-2v-8c0-1.1-0.9-2-2-2z"></path>' +
         '          </svg>' +
@@ -122,7 +111,10 @@
       },
       controller: ['$scope', '$element', '$attrs', '$q', function($scope, $element, $attrs, $q) {
         var ctrl = this;
+        var hasContent = false;
         var initializedPromise;
+
+        $scope.ctrl = ctrl;
 
         ctrl.RecordRTC = RecordRTC;
 
@@ -169,6 +161,18 @@
           });
         };
 
+        ctrl.playback = function() {
+          return $q(function(resolve, reject) {
+            if (!hasContent) reject(new Error('Nothing to play'));
+            initialize().then(function(o) {
+              $scope.elements.record.style.display = 'none';
+              $scope.elements.play.style.display = 'none';
+              $scope.elements.stop.style.display = 'inline-block';
+              return o.player.play();
+            });
+          });
+        };
+
         ctrl.pauseRecording = function() {
           return initialize().then(function(o) {
             $scope.paused = true;
@@ -200,16 +204,26 @@
               o.recorder.initRecorder();
               o.initialized = true;
             }
-            $scope.recording = true;
+            hasContent = true;
+            $scope.elements.record.style.display = 'none';
+            $scope.elements.play.style.display = 'none';
+            $scope.elements.stop.style.display = 'inline-block';
+            o.player.src = o.streamUrl;
+            o.player.muted = true;
             return o.recorder.startRecording();
           });
         };
 
         ctrl.stopRecording = function() {
           return $q(function(resolve, reject) {
+            if (!$scope.recording) resolve(null);
             initialize().then(function(o) {
               o.recorder.stopRecording(function (videoUrl) {
-                $scope.recording = false;
+                $scope.elements.record.style.display = 'inline-block';
+                $scope.elements.play.style.display = 'inline-block';
+                $scope.elements.stop.style.display = 'none';
+                o.player.src = videoUrl;
+                o.player.muted = false;
                 resolve(videoUrl);
               });
             });
@@ -240,10 +254,18 @@
                 var video = $element[0].getElementsByTagName('video')[0];
                 video.src = data.url;
                 video.muted = true;
+
+                video.addEventListener('ended', function() {
+                  $scope.elements.record.style.display = 'inline-block';
+                  $scope.elements.play.style.display = 'inline-block';
+                  $scope.elements.stop.style.display = 'none';
+                });
+
                 return {
                   initialized: false,
                   player: video,
-                  recorder: RecordRTC(stream, options)
+                  recorder: RecordRTC(data.stream, recordrtc.config.recordrtc),
+                  streamUrl: data.url
                 };
               });
           }
@@ -252,9 +274,13 @@
 
       }],
       link: function(scope, el, attrs, ctrl) {
-        scope.paused = false;
-        scope.playing = false;
-        scope.recording = false;
+
+        scope.elements = {
+          pause: el[0].querySelector('.record-rtc-pause'),
+          play: el[0].querySelector('.record-rtc-play'),
+          record: el[0].querySelector('.record-rtc-record'),
+          stop: el[0].querySelector('.record-rtc-stop')
+        };
 
         el.find('ng-transclude').bind('click', function(e) {
           ctrl.show();

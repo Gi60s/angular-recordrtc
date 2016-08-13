@@ -41,6 +41,7 @@
   background-color: #000;
   cursor: default;
 }
+
 .record-rtc-controls {
   height: 39px;
   position: relative;
@@ -57,4 +58,11 @@
 }
 .record-rtc-controls button:hover {
   background-color: rgba(90, 90, 90, .5);
+}
+
+.record-rtc-messages {
+  position: relative;
+  margin-top: -40px;
+  color: #FFF;
+  background-color: rgba(0, 0, 0, .5);
 }
