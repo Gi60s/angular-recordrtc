@@ -60,9 +60,50 @@
   background-color: rgba(90, 90, 90, .5);
 }
 
+.record-rtc-button {
+  height: 34px;
+}
+.record-rtc-button > div {
+  display: inline-block;
+  height: 21px;
+  overflow: visible;
+}
+
 .record-rtc-messages {
   position: relative;
   margin-top: -40px;
+  height: 0;
+  width:100%;
+  overflow: visible;
+}
+.record-rtc-messages > div {
+  margin: 0 auto;
+  width: 80px;
+  text-align: center;
   color: #FFF;
   background-color: rgba(0, 0, 0, .5);
+  font-weight: bold;
+}
+.record-rtc-messages .record-rtc-message-playing {
+  color: green;
+  display: none;
+}
+.record-rtc-messages .record-rtc-message-recording {
+  color: red;
+  display: none;
+}
+
+.record-rtc-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow: visible;
+  height: 0;
+  color: #FFF;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 1em;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, .5);
+  cursor: pointer;
 }

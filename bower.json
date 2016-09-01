@@ -21,6 +21,7 @@
     "tests"
   ],
   "dependencies": {
-    "recordrtc": "^5.3.8"
+    "recordrtc": "^5.3.8",
+    "bootstrap-filestyle": "markusslima/bootstrap-filestyle#^1.2.1"
   }
 }

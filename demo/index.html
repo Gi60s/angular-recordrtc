@@ -7,18 +7,17 @@
         <meta name="description" content="demo of angular directive implementing record rtc library">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link rel="stylesheet" href="../angular-recordrtc.css">
     </head>
-    <body ng-app="app">
-        <record-rtc>
-          <button type='button'>Do Stuff</button>
-        </record-rtc>
+    <body ng-app="app" style="padding: 20px;">
+        <record-rtc></record-rtc>
 
-        <input type="file" accept="video/*;capture=camcorder">
 
+        <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
         <script src="../bower_components/recordrtc/RecordRTC.min.js"></script>
+        <script src="../bower_components/bootstrap-filestyle/src/bootstrap-filestyle.min.js"> </script>
         <script src="../angular-recordrtc.js"></script>
         <script src="main.js"></script>
     </body>
